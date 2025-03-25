@@ -37,17 +37,18 @@
         .row {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
+            margin-bottom: 10px;
         }
         .control-btn {
-            width: 50px;
-            height: 50px;
-            font-size: 20px;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
             background-color: gray;
             color: white;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 10px;
         }
         .watermark {
             position: absolute;
@@ -152,22 +153,11 @@
             snake.forEach(part => ctx.fillRect(part.x, part.y, 20, 20));
         }
         
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "ArrowUp" && dy === 0) { dy = -20; dx = 0; }
-            if (event.key === "ArrowDown" && dy === 0) { dy = 20; dx = 0; }
-            if (event.key === "ArrowLeft" && dx === 0) { dx = -20; dy = 0; }
-            if (event.key === "ArrowRight" && dx === 0) { dx = 20; dy = 0; }
-        });
-
-        upBtn.addEventListener("click", () => { if (dy === 0) { dy = -20; dx = 0; }});
-        downBtn.addEventListener("click", () => { if (dy === 0) { dy = 20; dx = 0; }});
-        leftBtn.addEventListener("click", () => { if (dx === 0) { dx = -20; dy = 0; }});
-        rightBtn.addEventListener("click", () => { if (dx === 0) { dx = 20; dy = 0; }});
-        
         playBtn.addEventListener("click", startGame);
         tryAgainBtn.addEventListener("click", startGame);
     </script>
 </body>
 </html>
+
 
 
