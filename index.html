@@ -30,6 +30,11 @@
         }
         .controls {
             margin-top: 20px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        .row {
             display: flex;
             justify-content: center;
             gap: 10px;
@@ -52,11 +57,15 @@
     <canvas id="gameCanvas" width="400" height="400"></canvas>
     <button id="tryAgainBtn" style="display: none;">Try Again</button>
     
-    <div class="controls" style="display: none;">
-        <button class="control-btn" id="leftBtn">⬅</button>
-        <button class="control-btn" id="upBtn">⬆</button>
-        <button class="control-btn" id="downBtn">⬇</button>
-        <button class="control-btn" id="rightBtn">➡</button>
+    <div class="controls">
+        <div class="row">
+            <button class="control-btn" id="upBtn">⬆</button>
+        </div>
+        <div class="row">
+            <button class="control-btn" id="leftBtn">⬅</button>
+            <button class="control-btn" id="downBtn">⬇</button>
+            <button class="control-btn" id="rightBtn">➡</button>
+        </div>
     </div>
     
     <script>
@@ -135,3 +144,4 @@
     </script>
 </body>
 </html>
+
