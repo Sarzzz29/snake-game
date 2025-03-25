@@ -44,7 +44,7 @@
         .row {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
         }
         .control-btn {
             width: 60px;
@@ -100,10 +100,6 @@
         const tryAgainBtn = document.getElementById("tryAgainBtn");
         const gameOverMessage = document.getElementById("gameOverMessage");
         const controls = document.querySelector(".controls");
-        const upBtn = document.getElementById("upBtn");
-        const downBtn = document.getElementById("downBtn");
-        const leftBtn = document.getElementById("leftBtn");
-        const rightBtn = document.getElementById("rightBtn");
         
         let snake, food, dx, dy, gameInterval, speed = 200, score = 0;
         
@@ -141,7 +137,7 @@
             if (head.x === food.x && head.y === food.y) {
                 food = { x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20 };
                 score++;
-                if (speed > 100) speed -= 2;
+                if (speed > 100) speed -= 5;
                 clearInterval(gameInterval);
                 gameInterval = setInterval(gameLoop, speed);
             } else {
@@ -162,9 +158,15 @@
             snake.forEach(part => ctx.fillRect(part.x, part.y, 20, 20));
         }
         
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowUp" && dy === 0) { dy = -20; dx = 0; }
+            else if (event.key === "ArrowDown" && dy === 0) { dy = 20; dx = 0; }
+            else if (event.key === "ArrowLeft" && dx === 0) { dx = -20; dy = 0; }
+            else if (event.key === "ArrowRight" && dx === 0) { dx = 20; dy = 0; }
+        });
+        
         playBtn.addEventListener("click", startGame);
         tryAgainBtn.addEventListener("click", startGame);
     </script>
 </body>
 </html>
-
