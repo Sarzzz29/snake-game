@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        body {
+            text-align: center;
+            background-color: #2c2f33;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid white;
+            display: none;
+        }
+        #playBtn, #tryAgainBtn {
+            padding: 15px 30px;
+            font-size: 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        #playBtn:hover, #tryAgainBtn:hover {
+            background-color: darkgreen;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            background-color: gray;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Snake Game</h1>
+    <button id="playBtn">Play</button>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <button id="tryAgainBtn" style="display: none;">Try Again</button>
+    
+    <div class="controls" style="display: none;">
+        <button class="control-btn" id="leftBtn">⬅</button>
+        <button class="control-btn" id="upBtn">⬆</button>
+        <button class="control-btn" id="downBtn">⬇</button>
+        <button class="control-btn" id="rightBtn">➡</button>
+    </div>
+    
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const playBtn = document.getElementById("playBtn");
+        const tryAgainBtn = document.getElementById("tryAgainBtn");
+        const controls = document.querySelector(".controls");
+        const upBtn = document.getElementById("upBtn");
+        const downBtn = document.getElementById("downBtn");
+        const leftBtn = document.getElementById("leftBtn");
+        const rightBtn = document.getElementById("rightBtn");
+        
+        let snake, food, dx, dy, gameInterval;
+        
+        function startGame() {
+            playBtn.style.display = "none";
+            tryAgainBtn.style.display = "none";
+            canvas.style.display = "block";
+            controls.style.display = "flex";
+            
+            snake = [{ x: 200, y: 200 }];
+            food = { x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20 };
+            dx = 20;
+            dy = 0;
+            
+            gameInterval = setInterval(gameLoop, 100);
+        }
+        
+        function gameLoop() {
+            let head = { x: snake[0].x + dx, y: snake[0].y + dy };
+            
+            if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height || snake.some(s => s.x === head.x && s.y === head.y)) {
+                clearInterval(gameInterval);
+                tryAgainBtn.style.display = "block";
+                controls.style.display = "none";
+                return;
+            }
+            
+            snake.unshift(head);
+            
+            if (head.x === food.x && head.y === food.y) {
+                food = { x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20 };
+            } else {
+                snake.pop();
+            }
+            
+            drawGame();
+        }
+        
+        function drawGame() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = "red";
+            ctx.fillRect(food.x, food.y, 20, 20);
+            
+            ctx.fillStyle = "green";
+            snake.forEach(part => ctx.fillRect(part.x, part.y, 20, 20));
+        }
+        
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowUp" && dy === 0) { dx = 0; dy = -20; }
+            else if (event.key === "ArrowDown" && dy === 0) { dx = 0; dy = 20; }
+            else if (event.key === "ArrowLeft" && dx === 0) { dx = -20; dy = 0; }
+            else if (event.key === "ArrowRight" && dx === 0) { dx = 20; dy = 0; }
+        });
+        
+        upBtn.addEventListener("click", () => { if (dy === 0) { dx = 0; dy = -20; } });
+        downBtn.addEventListener("click", () => { if (dy === 0) { dx = 0; dy = 20; } });
+        leftBtn.addEventListener("click", () => { if (dx === 0) { dx = -20; dy = 0; } });
+        rightBtn.addEventListener("click", () => { if (dx === 0) { dx = 20; dy = 0; } });
+        
+        playBtn.addEventListener("click", startGame);
+        tryAgainBtn.addEventListener("click", startGame);
+    </script>
+</body>
+</html>
