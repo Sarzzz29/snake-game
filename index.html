@@ -49,12 +49,26 @@
             cursor: pointer;
             border-radius: 5px;
         }
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            opacity: 0.5;
+        }
+        #gameOverMessage {
+            display: none;
+            font-size: 24px;
+            color: red;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <h1>Snake Game</h1>
     <button id="playBtn">Play</button>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="gameOverMessage">Yahaha kasihan banget sih lo NOOB!</div>
     <button id="tryAgainBtn" style="display: none;">Try Again</button>
     
     <div class="controls">
@@ -67,23 +81,26 @@
             <button class="control-btn" id="rightBtn">➡</button>
         </div>
     </div>
+    <div class="watermark">Created by SarzKun</div>
     
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const playBtn = document.getElementById("playBtn");
         const tryAgainBtn = document.getElementById("tryAgainBtn");
+        const gameOverMessage = document.getElementById("gameOverMessage");
         const controls = document.querySelector(".controls");
         const upBtn = document.getElementById("upBtn");
         const downBtn = document.getElementById("downBtn");
         const leftBtn = document.getElementById("leftBtn");
         const rightBtn = document.getElementById("rightBtn");
         
-        let snake, food, dx, dy, gameInterval;
+        let snake, food, dx, dy, gameInterval, speed = 200, score = 0;
         
         function startGame() {
             playBtn.style.display = "none";
             tryAgainBtn.style.display = "none";
+            gameOverMessage.style.display = "none";
             canvas.style.display = "block";
             controls.style.display = "flex";
             
@@ -91,8 +108,11 @@
             food = { x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20 };
             dx = 20;
             dy = 0;
+            score = 0;
+            speed = 200;
             
-            gameInterval = setInterval(gameLoop, 100);
+            clearInterval(gameInterval);
+            gameInterval = setInterval(gameLoop, speed);
         }
         
         function gameLoop() {
@@ -102,6 +122,7 @@
                 clearInterval(gameInterval);
                 tryAgainBtn.style.display = "block";
                 controls.style.display = "none";
+                gameOverMessage.style.display = "block";
                 return;
             }
             
@@ -109,6 +130,10 @@
             
             if (head.x === food.x && head.y === food.y) {
                 food = { x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20 };
+                score++;
+                if (speed > 100) speed -= 5;
+                clearInterval(gameInterval);
+                gameInterval = setInterval(gameLoop, speed);
             } else {
                 snake.pop();
             }
@@ -128,20 +153,21 @@
         }
         
         document.addEventListener("keydown", (event) => {
-            if (event.key === "ArrowUp" && dy === 0) { dx = 0; dy = -20; }
-            else if (event.key === "ArrowDown" && dy === 0) { dx = 0; dy = 20; }
-            else if (event.key === "ArrowLeft" && dx === 0) { dx = -20; dy = 0; }
-            else if (event.key === "ArrowRight" && dx === 0) { dx = 20; dy = 0; }
+            if (event.key === "ArrowUp" && dy === 0) { dy = -20; dx = 0; }
+            if (event.key === "ArrowDown" && dy === 0) { dy = 20; dx = 0; }
+            if (event.key === "ArrowLeft" && dx === 0) { dx = -20; dy = 0; }
+            if (event.key === "ArrowRight" && dx === 0) { dx = 20; dy = 0; }
         });
-        
-        upBtn.addEventListener("click", () => { if (dy === 0) { dx = 0; dy = -20; } });
-        downBtn.addEventListener("click", () => { if (dy === 0) { dx = 0; dy = 20; } });
-        leftBtn.addEventListener("click", () => { if (dx === 0) { dx = -20; dy = 0; } });
-        rightBtn.addEventListener("click", () => { if (dx === 0) { dx = 20; dy = 0; } });
+
+        upBtn.addEventListener("click", () => { if (dy === 0) { dy = -20; dx = 0; }});
+        downBtn.addEventListener("click", () => { if (dy === 0) { dy = 20; dx = 0; }});
+        leftBtn.addEventListener("click", () => { if (dx === 0) { dx = -20; dy = 0; }});
+        rightBtn.addEventListener("click", () => { if (dx === 0) { dx = 20; dy = 0; }});
         
         playBtn.addEventListener("click", startGame);
         tryAgainBtn.addEventListener("click", startGame);
     </script>
 </body>
 </html>
+
 
